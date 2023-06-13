@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, Text, TouchableOpacity, TextInput, View, Button, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
-import Checkbox from 'expo-checkbox';
 import { EvilIcons } from '@expo/vector-icons';
 import { styles } from './home.style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,18 +9,12 @@ import { useIsFocused } from '@react-navigation/native';
 
 
 export function Home({ navigation }) {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
-  const [toggleCheckBox2, setToggleCheckBox2] = useState(false)
-  const [toggleCheckBox3, setToggleCheckBox3] = useState(false)
-  const [toggleCheckBox4, setToggleCheckBox4] = useState(false)
   const [noteList, setNoteList] = useState();
+  const [searchNote, setSearchNote]= useState('')
+  const [noResult, setNoResult]= useState(false)
 
   const isFocus = useIsFocused();
   const numColumns = 2;
-
-  function updateToggle(id) {
-    return setToggle(id);
-  }
 
   const findNote = async () => {
 
@@ -31,16 +24,39 @@ export function Home({ navigation }) {
   }
 
   useEffect(() => {
-    findNote();
+    if (isFocus) {
+      findNote();
+    }
   }, [isFocus]);
+
+  const handleOnSearch = async text => {
+    setSearchNote(text);
+    if (!text) {
+      setSearchNote('');
+      setNoResult(false)
+      return await findNote();
+    }
+    const filteredNotes = noteList.filter(n => {
+      if (n.title.toLowerCase().includes(text.toLowerCase())) {
+        return n;
+      }
+    });
+    if (filteredNotes.length) {
+      setNoteList([...filteredNotes])
+    } else {
+      setNoResult(true);
+    }
+  }
 
   return (
 
     <SafeAreaView style={styles.container}>
 
-      <TextInput style={styles.search}>
-        <EvilIcons name="search" size={40} style={styles.search_icon} />
+      <TextInput style={styles.search} onChangeText={handleOnSearch}>
+        
       </TextInput>
+
+      <EvilIcons name="search" size={40} style={styles.search_icon} />
 
       <View style={styles.nav}>
         <TouchableOpacity style={{ marginHorizontal: 40, borderBottomWidth: 3, borderBottomColor: '#1aa7ec', borderBottomRightRadius: 3, borderBottomLeftRadius: 3 }} onPress={() => navigation.navigate("Note")}>
@@ -55,10 +71,11 @@ export function Home({ navigation }) {
 
       <StatusBar style="auto" />
 
-      <SafeAreaView>
+      <View>
 
         <View style={styles.note_container}>
-          <FlatList
+
+          {noResult ? <Text style={{textAlign: 'center'}}>No Result</Text> : <FlatList
             data={noteList}
             renderItem={({ item }) => {
               return (
@@ -74,16 +91,16 @@ export function Home({ navigation }) {
               )
             }}
             keyExtractor={item => item.id.toString()}
-            removeClippedSubviews={true}
             numColumns={numColumns}
-          />
+          />}
+          
         </View>
 
         <View style={styles.plus}>
           <EvilIcons name="plus" size={60} color="#1aa7ec" onPress={() => navigation.navigate('CreateNote')} />
         </View>
 
-      </SafeAreaView>
+      </View>
     </SafeAreaView>
   );
 }

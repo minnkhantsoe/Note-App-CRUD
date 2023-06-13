@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from "react-native";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
 
   container: {
     flex: 1,
@@ -28,11 +28,25 @@ const styles = StyleSheet.create({
     left: 30,
     top: -10,
     marginTop: 30,
-    zIndex: 999
+    zIndex: 995,
+    color: '#1aa7ec',
+    paddingLeft: 50
   },
 
   search_icon: {
-    color: '#1aa7ec'
+    color: '#1aa7ec',
+    position: 'absolute',
+    top: 28,
+    right: 305,
+    zIndex: 996
+  },
+
+  task_search_icon: {
+    color: '#fff',
+    position: 'absolute',
+    top: 28,
+    right: 305,
+    zIndex: 996
   },
 
   text: {
@@ -51,24 +65,37 @@ const styles = StyleSheet.create({
 
   plus: {
     position: 'relative',
-    top: -80,
+    top: -90,
     left: 170,
     zIndex: 997
+  },
+
+  task_plus: {
+    position: 'relative',
+    top: -85,
+    left: 140,
+    zIndex: 997
+  },
+
+  task_container: {
+    position: 'relative',
+    marginTop: 250,
+    marginBottom: 85,
   },
 
   list: {
     position: 'relative',
     backgroundColor: '#ffff',
-    flexDirection: 'row',
     width: 330,
-    marginBottom: 40,
+    marginBottom: 30,
     paddingVertical: 30,
     borderRadius: 20,
-    top: 80
+    paddingHorizontal: 30
   },
 
-  checkboxes: {
-    marginHorizontal: 20
+  checkbox: {
+    marginTop: -27,
+    marginHorizontal: -20
   },
 
   todo_plus: {
@@ -80,8 +107,7 @@ const styles = StyleSheet.create({
   note_container: {
     marginTop: 200,
     position: 'relative',
-    marginLeft: -0,
-    marginBottom: 80,
+    marginBottom: 90,
     width: 410
   },
 
@@ -135,13 +161,22 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
 
-  note_create_text: {
-    textAlign: 'center',
-    color: '#fff'
-  }
+  create_task: {
+    borderColor: "#000",
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
+    borderRadius: 50,
+    marginBottom: 20
+  },
+
+  task_create_button: {
+    backgroundColor: '#000',
+    marginHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 50,
+    marginBottom: 20
+  },
 
 
 });
-
-
-export { styles };

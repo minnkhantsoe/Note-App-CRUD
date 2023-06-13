@@ -1,26 +1,77 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, Text, TouchableOpacity, TextInput, View, Button, FlatList } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, TextInput, View, Pressable, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
-import Checkbox from 'expo-checkbox';
 import { EvilIcons } from '@expo/vector-icons';
 import { styles } from './home.style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { Checkbox } from 'react-native-paper';
 
 export function ToDoList({ navigation }) {
+  const [task, setTask] = useState();
+  const [searchTask, setSearchTask]= useState('')
+  const [checkedItems, setCheckedItems] = useState('');
+  const [noResult, setNoResult]= useState(false)
 
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
-  const [toggleCheckBox2, setToggleCheckBox2] = useState(false)
-  const [toggleCheckBox3, setToggleCheckBox3] = useState(false)
-  const [toggleCheckBox4, setToggleCheckBox4] = useState(false)
+  const isChecked = (id) => {
+    return checkedItems.includes(id);
+  };
+
+  const toggleItem = (id) => {
+    if (isChecked(id)) {
+      setCheckedItems(checkedItems.filter(item => item !== id));
+    } else {
+      setCheckedItems([...checkedItems, id]);
+    }
+  };
+
+
+  const isFocus = useIsFocused();
+
+  const findTask = async () => {
+
+    const result = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res));
+    console.log("result", result);
+    setTask(result);
+  }
+
+  useEffect(() => {
+    if (isFocus) {
+      findTask();
+      
+    }
+  }, [isFocus]);
+
+  const handleOnSearch = async text => {
+    setSearchTask(text);
+    if (!text) {
+      setSearchTask('');
+      setNoResult(false)
+      return await findTask();
+    }
+    const filteredTasks = task.filter(t => {
+      if (t.task.toLowerCase().includes(text.toLowerCase())) {
+        return t;
+      }
+    });
+    if (filteredTasks.length) {
+      setTask([...filteredTasks])
+    } else {
+      setNoResult(true);
+    }
+  }
+
+
 
   return (
 
     <SafeAreaView style={styles.container}>
 
-      <TextInput style={styles.search}>
-        <EvilIcons name="search" size={40} style={styles.search_icon} />
+      <EvilIcons name="search" size={40} style={styles.task_search_icon} />
+
+      <TextInput style={styles.search} value={searchTask} onChangeText={handleOnSearch}>
+
       </TextInput>
 
       <View style={styles.nav}>
@@ -36,59 +87,41 @@ export function ToDoList({ navigation }) {
 
       <StatusBar style="auto" />
 
-      <SafeAreaView>
+      <View>
 
-        <View style={styles.list}>
+        <View style={styles.task_container}>
 
-          <Checkbox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={(newValue) => setToggleCheckBox(newValue)}
-            style={styles.checkboxes} />
+          {noResult ? <Text>No Result</Text> :  <FlatList
+            data={task}
+            renderItem={({ item }) => {
 
-          <Text style={{ color: '#000', marginHorizontal: 20, fontSize: 15 }}>To do list text</Text>
+              return (
+                <View>
+                  <TouchableOpacity onPress={() => navigation.navigate('EditTask', { item })} >
+                    <View style={styles.list}>
 
+                      <Text style={{ color: '#000', marginHorizontal: 40, fontSize: 15, }}>{item.task}</Text>
+
+
+                      <View style={styles.checkbox} >
+                        <Checkbox status={isChecked(item.id) ? "checked" : "unchecked"} onPress={() => toggleItem(item.id)} />
+                      </View>
+
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+            keyExtractor={item => item.id.toString()}
+          />} 
+         
         </View>
 
-        <View style={styles.list}>
-
-          <Checkbox
-            disabled={false}
-            value={toggleCheckBox2}
-            onValueChange={(newValue) => setToggleCheckBox2(newValue)}
-            style={styles.checkboxes} />
-
-          <Text style={{ color: '#000', marginHorizontal: 20, fontSize: 15 }}>To do list text</Text>
-
+        <View style={styles.task_plus}>
+          <EvilIcons name="plus" size={60} color="#000" onPress={() => navigation.navigate('CreateTask')} />
         </View>
 
-        <View style={styles.list}>
-
-          <Checkbox
-            disabled={false}
-            value={toggleCheckBox3}
-            onValueChange={(newValue) => setToggleCheckBox3(newValue)}
-            style={styles.checkboxes} />
-
-          <Text style={{ color: '#000', marginHorizontal: 20, fontSize: 15 }}>To do list text</Text>
-
-        </View>
-
-        <View style={styles.list}>
-
-          <Checkbox
-            disabled={false}
-            value={toggleCheckBox4}
-            onValueChange={(newValue) => setToggleCheckBox4(newValue)}
-            style={styles.checkboxes} />
-
-          <Text style={{ color: '#000', marginHorizontal: 20, fontSize: 15 }}>To do list text</Text>
-
-        </View>
-
-        <EvilIcons name="plus" size={70} color="#000" style={styles.todo_plus} />
-
-      </SafeAreaView>
+      </View>
     </SafeAreaView>
   );
 }
