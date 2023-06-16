@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../home/home.style";
+import { styles } from "./createTask.style";
 
 export default function CreateTask({ navigation }) {
 
@@ -13,22 +13,12 @@ export default function CreateTask({ navigation }) {
     console.log("Task", text)
   };
 
-  const handleSubmit = async () => {
-    const oldTask = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res));
-    console.log(oldTask);
+  const handleSubmit = async (activeTab) => {
 
-    if (oldTask) {
-      const newTask = { id: Date.now(), task: task }
-      const totalList = [...oldTask, newTask]
-      console.log(totalList);
-
-      AsyncStorage.setItem('taskList', JSON.stringify(totalList));
-    } else {
-      const taskList = [{ id: Date.now(), task: task }]
-      AsyncStorage.setItem('taskList', JSON.stringify(taskList));
-    };
-
-    navigation.navigate("ToDoList");
+    const oldTask = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res)).then(res => res ?? []);
+    const totalList = [...oldTask, { id: Date.now(), task: task }]
+    AsyncStorage.setItem('taskList', JSON.stringify(totalList));
+    navigation.navigate("Note", activeTab==2);
 
   };
 

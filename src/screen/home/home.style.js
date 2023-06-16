@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
 
@@ -17,23 +17,43 @@ export const styles = StyleSheet.create({
     zIndex: 998
   },
 
+  nav_bar: {
+    marginHorizontal: 40,
+    borderBottomWidth: 3,
+    borderBottomColor: '#1aa7ec',
+    borderBottomRightRadius: 3,
+    borderBottomLeftRadius: 3
+  },
+
+  nav_text: {
+    color: '#1aa7ec',
+    opacity: 1,
+    fontSize: 30
+  },
+
+  nav_text_left: {
+    color: '#000',
+    opacity: 0.5,
+    fontSize: 30 
+  },
+
   search: {
     position: 'absolute',
     backgroundColor: '#000',
     paddingHorizontal: 15,
     paddingVertical: 10,
     width: 330,
-    opacity: 0.8,
     borderRadius: 60,
     left: 30,
     top: -10,
     marginTop: 30,
     zIndex: 995,
     color: '#1aa7ec',
-    paddingLeft: 50
+    paddingLeft: 50,
+    opacity: 0.8
   },
 
-  search_icon: {
+  note_search_icon: {
     color: '#1aa7ec',
     position: 'absolute',
     top: 28,
@@ -63,7 +83,7 @@ export const styles = StyleSheet.create({
     borderRadius: 19
   },
 
-  plus: {
+  note_plus: {
     position: 'relative',
     top: -90,
     left: 170,
@@ -72,15 +92,16 @@ export const styles = StyleSheet.create({
 
   task_plus: {
     position: 'relative',
-    top: -85,
-    left: 140,
+    top: -92,
+    left: 130,
     zIndex: 997
   },
 
   task_container: {
     position: 'relative',
-    marginTop: 250,
-    marginBottom: 85,
+    marginTop: 205,
+    marginBottom: 90,
+    width: 330,
   },
 
   list: {
@@ -116,7 +137,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     width: 170,
-    marginHorizontal: 18
+    marginHorizontal: 18,
   },
 
   note_title: {
@@ -133,49 +154,6 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 10,
     color: '#fff',
-  },
-
-  create_title: {
-    borderColor: "#1aa7ec",
-    borderWidth: 1,
-    paddingHorizontal: 20,
-    marginHorizontal: 10,
-    borderRadius: 50,
-    marginBottom: 20
-  },
-
-  create_body: {
-    borderColor: "#1aa7ec",
-    borderWidth: 1,
-    paddingHorizontal: 20,
-    marginHorizontal: 10,
-    borderRadius: 50,
-    marginBottom: 20
-  },
-
-  note_create_button: {
-    backgroundColor: '#1aa7ec',
-    marginHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 50,
-    marginBottom: 20
-  },
-
-  create_task: {
-    borderColor: "#000",
-    borderWidth: 1,
-    paddingHorizontal: 20,
-    marginHorizontal: 10,
-    borderRadius: 50,
-    marginBottom: 20
-  },
-
-  task_create_button: {
-    backgroundColor: '#000',
-    marginHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 50,
-    marginBottom: 20
   },
 
 

@@ -1,30 +1,31 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Modal, Alert, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../home/home.style";
+import { styles } from "./editTask.style";
+import React from "react";
 
 export default function EditTask({ navigation, route }) {
   const [task, setTask] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { item } = route.params;
 
   const handleOnChangeTask = text => {
-    setTask(text);
-    console.log("Task", text)
+    setTask(text)
   };
 
-  const deleteTask = async () => {
+  const deleteTask = async (activeTab) => {
     const result = await AsyncStorage.getItem('taskList');
     let tasks = [];
     if (result !== null) tasks = JSON.parse(result)
 
     const newTasks = tasks.filter(n => n.id !== item.id)
     await AsyncStorage.setItem('taskList', JSON.stringify(newTasks))
-    navigation.navigate("ToDoList")
+    navigation.navigate("Note", activeTab==2);
   };
 
-  const updateTask = async () => {
+  const updateTask = async (activeTab) => {
     const result = await AsyncStorage.getItem('taskList');
     let tasks = [];
     if (result !== null) tasks = JSON.parse(result)
@@ -32,12 +33,41 @@ export default function EditTask({ navigation, route }) {
     const newTasks = tasks.findIndex(n => n.id == item.id)
     tasks[newTasks].task = task
     await AsyncStorage.setItem('taskList', JSON.stringify(tasks));
-    navigation.navigate("ToDoList");
-  };
+    navigation.navigate("Note", activeTab == 2);
+  }
 
   return (
 
     < SafeAreaView >
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+      >
+
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Are You Sure ?</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={deleteTask}>
+              <Text style={styles.textStyle}>Delete</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+
+      </Modal>
+
+
+
 
       <View style={styles.create_task}>
         <TextInput placeholder='Edit Task' onChangeText={handleOnChangeTask}>
@@ -49,7 +79,7 @@ export default function EditTask({ navigation, route }) {
         <Text style={{ textAlign: 'center', color: '#fff' }}>Update</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.task_create_button} onPress={deleteTask}>
+      <TouchableOpacity style={styles.task_create_button} onPress={() => setModalVisible(true)}>
         <Text style={{ textAlign: 'center', color: '#fff' }}>Delete</Text>
       </TouchableOpacity>
 

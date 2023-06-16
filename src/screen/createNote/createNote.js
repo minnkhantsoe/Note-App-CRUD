@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../home/home.style";
+import { styles } from "./createNote.style";
 
 export default function CreateNote({ navigation }) {
 
@@ -20,18 +20,10 @@ export default function CreateNote({ navigation }) {
   };
 
   const handleSubmit = async () => {
-    const oldNote = await AsyncStorage.getItem('noteList').then(res => JSON.parse(res));
-    console.log(oldNote);
-    if (oldNote) {
-      const newNote = { id: Date.now(), title: noteTitle, body: noteBody }
-      const totalList = [...oldNote, newNote]
-      console.log(totalList);
-      AsyncStorage.setItem('noteList', JSON.stringify(totalList));
-    } else {
-      const noteList = [{ id: Date.now(), title: noteTitle, body: noteBody }]
-      AsyncStorage.setItem('noteList', JSON.stringify(noteList));
-    };
-
+    
+    const oldNote = await AsyncStorage.getItem('noteList').then(res => JSON.parse(res)).then(res => res ?? []);
+    const totalList = [...oldNote, { id: Date.now(), title: noteTitle, body: noteBody }]
+    AsyncStorage.setItem('noteList', JSON.stringify(totalList));
     navigation.navigate("Note");
 
   };
@@ -49,7 +41,7 @@ export default function CreateNote({ navigation }) {
       </View>
 
       <TouchableOpacity onPress={handleSubmit} style={styles.note_create_button}>
-        <Text style={{textAlign: 'center', color: '#fff'}}>Create</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Create</Text>
       </TouchableOpacity>
 
     </SafeAreaView >

@@ -18,7 +18,6 @@ export default function NavigationStack() {
         <Stack.Screen name="Note" component={Home} />
         <Stack.Screen name="CreateNote" component={CreateNote} />
         <Stack.Screen name="EditNote" component={EditNote} />
-        <Stack.Screen name="ToDoList" component={ToDoList} />
         <Stack.Screen name="CreateTask" component={CreateTask} />
         <Stack.Screen name="EditTask" component={EditTask} />
 

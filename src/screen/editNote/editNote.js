@@ -1,12 +1,14 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Modal, Alert, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../home/home.style";
+import { styles } from "./editNote.style";
+import React from "react";
 
 export default function EditNote({ navigation, route }) {
   const [noteTitle, setNoteTitle] = useState('');
   const [noteBody, setNoteBody] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const { item } = route.params;
 
   const handleOnChangeTitle = text => {
@@ -35,15 +37,42 @@ export default function EditNote({ navigation, route }) {
     if (result !== null) notes = JSON.parse(result)
 
     const newNotes = notes.findIndex(n => n.id == item.id)
-    notes[newNotes].title= noteTitle
-    notes[newNotes].body= noteBody
+    notes[newNotes].title = noteTitle
+    notes[newNotes].body = noteBody
     await AsyncStorage.setItem('noteList', JSON.stringify(notes));
     navigation.navigate("Note");
   };
 
+
   return (
 
     < SafeAreaView >
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+      >
+
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Are You Sure ?</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={deleteNote}>
+              <Text style={styles.textStyle}>Delete</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+
+      </Modal>
 
       <View style={styles.create_title}>
         <TextInput placeholder='Edit Note Title' onChangeText={handleOnChangeTitle}>
@@ -58,11 +87,11 @@ export default function EditNote({ navigation, route }) {
       </View>
 
       <TouchableOpacity style={styles.note_create_button} onPress={updateNote} >
-        <Text style={styles.note_create_text}>Update</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Update</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.note_create_button} onPress={deleteNote}>
-        <Text style={styles.note_create_text}>Delete</Text>
+      <TouchableOpacity style={styles.note_create_button} onPress={() => setModalVisible(true)}>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Delete</Text>
       </TouchableOpacity>
 
     </SafeAreaView >
