@@ -20,7 +20,7 @@ export default function CreateNote({ navigation }) {
   };
 
   const handleSubmit = async () => {
-    
+
     const oldNote = await AsyncStorage.getItem('noteList').then(res => JSON.parse(res)).then(res => res ?? []);
     const totalList = [...oldNote, { id: Date.now(), title: noteTitle, body: noteBody }]
     AsyncStorage.setItem('noteList', JSON.stringify(totalList));

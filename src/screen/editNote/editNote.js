@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./editNote.style";
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from "react";
 
 export default function EditNote({ navigation, route }) {
@@ -61,13 +63,13 @@ export default function EditNote({ navigation, route }) {
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={deleteNote}>
-              <Text style={styles.textStyle}>Delete</Text>
+              <Text style={styles.textStyle}>Delete <AntDesign name="delete" size={15} color="white" /> </Text>
             </Pressable>
 
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
+              <Text style={styles.textStyle}>Cancel <MaterialCommunityIcons name="cancel" size={15} color="white" /> </Text>
             </Pressable>
           </View>
         </View>
@@ -87,11 +89,11 @@ export default function EditNote({ navigation, route }) {
       </View>
 
       <TouchableOpacity style={styles.note_create_button} onPress={updateNote} >
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Update</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Update    <AntDesign name="edit" size={15} color="white" /> </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.note_create_button} onPress={() => setModalVisible(true)}>
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Delete</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Delete    <AntDesign name="delete" size={15} color="white" /> </Text>
       </TouchableOpacity>
 
     </SafeAreaView >

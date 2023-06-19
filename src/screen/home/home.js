@@ -17,24 +17,21 @@ export function Home({ navigation, route }) {
   const [checkedItems, setCheckedItems] = useState([]);
   const [noResult, setNoResult] = useState(false)
   const [activeTab, setActiveTab] = useState(1)
-  
+
   const isFocus = useIsFocused();
   const numColumns = 2;
 
   useEffect(() => {
 
-      getNoteList(),
+    getNoteList(),
       getTaskList()
-    
+
   }, [isFocus]);
 
-  const noteTab = () => {
-    setActiveTab(1)
-  }
+  const noteTab = () => { setActiveTab(1) }
+   
 
-  const taskTab = () => {
-    setActiveTab(2)
-  }
+  const taskTab = () => { setActiveTab(2) }
 
   const isChecked = (id) => {
     return checkedItems.includes(id);
@@ -63,34 +60,24 @@ export function Home({ navigation, route }) {
     if (!text) {
       setSearchNote('');
       setNoResult(false)
-      return await getNoteList();
+      return getNoteList();
     }
 
     const filteredNotes = noteList.filter(n => n.title.toLowerCase().includes(text.toLowerCase()));
+    setNoteList([...filteredNotes])};
 
-    if (filteredNotes.length) {
-      setNoteList([...filteredNotes])
-    } else {
-      setNoResult(true);
-    }
-  };
 
   const handleOnTaskSearch = async text => {
     setSearchTask(text);
     if (!text) {
       setSearchTask('');
       setNoResult(false)
-      return await getTaskList();
+      return getTaskList();
     }
 
     const filteredTasks = task.filter(t => t.task.toLowerCase().includes(text.toLowerCase()));
-
-    if (filteredTasks.length) {
-      setTask([...filteredTasks])
-    } else {
-      setNoResult(true);
-    }
-  };
+    setTask([...filteredTasks])};
+ 
 
   const renderNoteItem = ({ item }) => {
     return (
@@ -133,10 +120,10 @@ export function Home({ navigation, route }) {
       <StatusBar style="auto" />
 
 
-      <EvilIcons name="search" size={40} style={ activeTab==1 ? styles.note_search_icon : styles.task_search_icon} />
-        <View style={styles.search}>
-        <TextInput style={{color: '#fff'}} onChangeText={ activeTab==1 ? handleOnNoteSearch : handleOnTaskSearch }  />
-        </View>
+      <EvilIcons name="search" size={40} style={activeTab == 1 ? styles.note_search_icon : styles.task_search_icon} />
+      <View style={styles.search}>
+        <TextInput style={{ color: '#fff' }} placeholder=' Search... ' placeholderTextColor={'white'} onChangeText={activeTab == 1 ? handleOnNoteSearch : handleOnTaskSearch} />
+      </View>
 
 
       <View style={styles.nav}>
@@ -153,12 +140,13 @@ export function Home({ navigation, route }) {
 
         <View style={styles.note_container}>
 
-          {noResult ? <Text style={{ textAlign: 'center' }}>No Result</Text> : <FlatList
+           <FlatList
             data={noteList}
             renderItem={renderNoteItem}
             keyExtractor={item => item.id.toString()}
+            ListEmptyComponent={()=> <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Notes Found </Text> }
             numColumns={numColumns}
-          />}
+          />
 
         </View>
 
@@ -166,18 +154,19 @@ export function Home({ navigation, route }) {
           <EvilIcons name="plus" size={60} color="#1aa7ec" onPress={() => navigation.navigate('CreateNote')} />
         </View>
 
-      </View> }
+      </View>}
 
 
       {activeTab == 2 && <View>
 
         <View style={styles.task_container}>
 
-          {noResult ? <Text style={{ textAlign: 'center' }} >No Result</Text> : <FlatList
+          <FlatList
             data={task}
             renderItem={renderTaskItem}
             keyExtractor={item => item.id.toString()}
-          />}
+            ListEmptyComponent={()=> <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Tasks Found </Text> }
+          />
 
         </View>
 

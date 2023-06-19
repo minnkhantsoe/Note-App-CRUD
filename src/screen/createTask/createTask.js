@@ -18,7 +18,7 @@ export default function CreateTask({ navigation }) {
     const oldTask = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res)).then(res => res ?? []);
     const totalList = [...oldTask, { id: Date.now(), task: task }]
     AsyncStorage.setItem('taskList', JSON.stringify(totalList));
-    navigation.navigate("Note", activeTab==2);
+    navigation.navigate("Note", activeTab == 2);
 
   };
 

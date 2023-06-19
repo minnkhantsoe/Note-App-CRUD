@@ -50,7 +50,6 @@ export const styles = StyleSheet.create({
     zIndex: 995,
     color: '#1aa7ec',
     paddingLeft: 50,
-    opacity: 0.8
   },
 
   note_search_icon: {
@@ -141,13 +140,12 @@ export const styles = StyleSheet.create({
   },
 
   note_title: {
-    fontSize: 35,
+    fontSize: 25,
     paddingLeft: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     color: '#fff',
-    backgroundColor: '#333'
-
+    backgroundColor: '#000'
   },
 
   note_body: {

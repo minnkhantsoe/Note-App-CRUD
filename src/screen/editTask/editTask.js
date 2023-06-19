@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./editTask.style";
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from "react";
 
 export default function EditTask({ navigation, route }) {
@@ -22,7 +24,7 @@ export default function EditTask({ navigation, route }) {
 
     const newTasks = tasks.filter(n => n.id !== item.id)
     await AsyncStorage.setItem('taskList', JSON.stringify(newTasks))
-    navigation.navigate("Note", activeTab==2);
+    navigation.navigate("Note", activeTab == 2);
   };
 
   const updateTask = async (activeTab) => {
@@ -53,13 +55,13 @@ export default function EditTask({ navigation, route }) {
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={deleteTask}>
-              <Text style={styles.textStyle}>Delete</Text>
+              <Text style={styles.textStyle}>Delete <AntDesign name="delete" size={15} color="white" /> </Text>
             </Pressable>
 
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
+              <Text style={styles.textStyle}>Cancel  <MaterialCommunityIcons name="cancel" size={15} color="white" /> </Text>
             </Pressable>
           </View>
         </View>
@@ -76,11 +78,11 @@ export default function EditTask({ navigation, route }) {
       </View>
 
       <TouchableOpacity style={styles.task_create_button} onPress={updateTask} >
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Update</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Update    <AntDesign name="edit" size={15} color="white" /> </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.task_create_button} onPress={() => setModalVisible(true)}>
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Delete</Text>
+        <Text style={{ textAlign: 'center', color: '#fff'}}>Delete    <AntDesign name="delete" size={15} color="white" /> </Text>
       </TouchableOpacity>
 
     </SafeAreaView >
