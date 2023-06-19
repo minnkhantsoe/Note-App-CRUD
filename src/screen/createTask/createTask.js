@@ -3,21 +3,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./createTask.style";
+import useAsyncHelper from "../../hook/custom/useAsyncHelper";
 
 export default function CreateTask({ navigation }) {
 
   const [task, setTask] = useState('');
+  const [oldTaskList, setNewTask] = useAsyncHelper("taskList")
 
   const handleOnChangeTask = text => {
     setTask(text);
     console.log("Task", text)
   };
 
+
   const handleSubmit = async (activeTab) => {
 
-    const oldTask = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res)).then(res => res ?? []);
-    const totalList = [...oldTask, { id: Date.now(), task: task }]
-    AsyncStorage.setItem('taskList', JSON.stringify(totalList));
+    setNewTask({ id: Date.now(), task: task, isChecked: false });
     navigation.navigate("Note", activeTab == 2);
 
   };

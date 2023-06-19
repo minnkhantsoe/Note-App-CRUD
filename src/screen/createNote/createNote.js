@@ -3,11 +3,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./createNote.style";
+import useAsyncHelper from "../../hook/custom/useAsyncHelper";
 
 export default function CreateNote({ navigation }) {
 
   const [noteTitle, setNoteTitle] = useState('');
   const [noteBody, setNoteBody] = useState('');
+  const [oldNoteList, setNewNote] = useAsyncHelper("noteList");
 
   const handleOnChangeTitle = text => {
     setNoteTitle(text);
@@ -20,10 +22,8 @@ export default function CreateNote({ navigation }) {
   };
 
   const handleSubmit = async () => {
-
-    const oldNote = await AsyncStorage.getItem('noteList').then(res => JSON.parse(res)).then(res => res ?? []);
-    const totalList = [...oldNote, { id: Date.now(), title: noteTitle, body: noteBody }]
-    AsyncStorage.setItem('noteList', JSON.stringify(totalList));
+    
+    setNewNote({ id: Date.now(), title: noteTitle, body: noteBody })
     navigation.navigate("Note");
 
   };

@@ -8,10 +8,15 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from "react";
 
 export default function EditNote({ navigation, route }) {
-  const [noteTitle, setNoteTitle] = useState('');
-  const [noteBody, setNoteBody] = useState('');
+  const [noteTitle, setNoteTitle] = useState(item?.title);
+  const [noteBody, setNoteBody] = useState(item?.body);
   const [modalVisible, setModalVisible] = useState(false);
   const { item } = route.params;
+
+  useEffect(() => {
+    setNoteTitle(item?.title)
+    setNoteBody(item?.body)
+  }, [])
 
   const handleOnChangeTitle = text => {
     setNoteTitle(text);

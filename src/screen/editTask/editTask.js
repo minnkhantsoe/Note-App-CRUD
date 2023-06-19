@@ -1,6 +1,6 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, Alert, Pressable } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Modal, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./editTask.style";
 import { AntDesign } from '@expo/vector-icons';
@@ -10,8 +10,11 @@ import React from "react";
 export default function EditTask({ navigation, route }) {
   const [task, setTask] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-
   const { item } = route.params;
+
+  useEffect(() => {
+    setTask(item?.task);
+  }, [])
 
   const handleOnChangeTask = text => {
     setTask(text)

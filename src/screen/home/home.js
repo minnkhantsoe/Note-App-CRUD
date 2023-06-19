@@ -24,7 +24,7 @@ export function Home({ navigation, route }) {
   useEffect(() => {
 
     getNoteList(),
-      getTaskList()
+    getTaskList()
 
   }, [isFocus]);
 
@@ -37,12 +37,17 @@ export function Home({ navigation, route }) {
     return checkedItems.includes(id);
   };
 
-  const checkToggleItem = async (id) => {
-    if (isChecked(id)) {
-      setCheckedItems(checkedItems.filter(item => item !== id));
-    } else {
-      setCheckedItems([...checkedItems, id]);
-    };
+  const checkToggleItem = (currentItemIdx) => {
+
+       task[index].isChecked = !task[index].isChecked;
+    task.map((item, idx) => {
+      if (idx === currentItemIdx) {
+        item.isChecked = !item.isChecked;
+      } 
+      return item
+     })
+
+
   };
 
   const getNoteList = async () => {
@@ -103,7 +108,7 @@ export function Home({ navigation, route }) {
 
 
             <View style={styles.checkbox} >
-              <Checkbox status={isChecked(item.id) ? "checked" : "unchecked"} onPress={() => { checkToggleItem(item.id) }} />
+              <Checkbox status={isChecked(item.id) ? "checked" : "unchecked"} onPress={() => { checkToggleItem(currentItemIdx) }} />
 
             </View>
 
