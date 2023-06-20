@@ -7,53 +7,41 @@ import { styles } from './home.style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { Checkbox } from 'react-native-paper';
+import useAsyncHelper from '../../hook/custom/useAsyncHelper';
 
 export function Home({ navigation, route }) {
 
   const [noteList, setNoteList] = useState();
-  const [searchNote, setSearchNote] = useState('')
+  const [searchNote, setSearchNote] = useState('');
   const [task, setTask] = useState();
   const [searchTask, setSearchTask] = useState('');
   const [checkedItems, setCheckedItems] = useState([]);
-  const [noResult, setNoResult] = useState(false)
-  const [activeTab, setActiveTab] = useState(1)
-
+  const [noResult, setNoResult] = useState(false);
+  const [activeTab, setActiveTab] = useState(1);
+  const [oldTaskList, setTaskList] = useAsyncHelper('taskList');
   const isFocus = useIsFocused();
   const numColumns = 2;
 
   useEffect(() => {
 
     getNoteList(),
-    getTaskList()
+      getTaskList()
 
   }, [isFocus]);
 
   const noteTab = () => { setActiveTab(1) }
-   
-
   const taskTab = () => { setActiveTab(2) }
 
-  const isChecked = (id) => {
-    return checkedItems.includes(id);
-  };
-
-  const checkToggleItem = (currentItemIdx) => {
-
-       task[index].isChecked = !task[index].isChecked;
-    task.map((item, idx) => {
-      if (idx === currentItemIdx) {
-        item.isChecked = !item.isChecked;
-      } 
-      return item
-     })
-
-
+  const checkToggleItem = (index) => {
+    task[index].isChecked = !task[index].isChecked;
+    setTask([...task]);
+    setTaskList([...task], true);
   };
 
   const getNoteList = async () => {
     const result = await AsyncStorage.getItem('noteList').then(res => JSON.parse(res));
     setNoteList(result);
-  }
+  };
 
   const getTaskList = async () => {
     const result = await AsyncStorage.getItem('taskList').then(res => JSON.parse(res));
@@ -69,8 +57,8 @@ export function Home({ navigation, route }) {
     }
 
     const filteredNotes = noteList.filter(n => n.title.toLowerCase().includes(text.toLowerCase()));
-    setNoteList([...filteredNotes])};
-
+    setNoteList([...filteredNotes])
+  };
 
   const handleOnTaskSearch = async text => {
     setSearchTask(text);
@@ -81,55 +69,51 @@ export function Home({ navigation, route }) {
     }
 
     const filteredTasks = task.filter(t => t.task.toLowerCase().includes(text.toLowerCase()));
-    setTask([...filteredTasks])};
- 
+    setTask([...filteredTasks])
+  };
+
 
   const renderNoteItem = ({ item }) => {
     return (
+
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('EditNote', { item })} >
           <View style={styles.note}>
             <Text style={styles.note_title}>{item.title}</Text>
             <Text style={styles.note_body}>{item.body}</Text>
-
           </View>
         </TouchableOpacity>
       </View>
     )
   };
 
-  const renderTaskItem = ({ item }) => {
+  const renderTaskItem = ({ item, index }) => {
     return (
+
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('EditTask', { item })} >
           <View style={styles.list}>
-
             <Text style={{ color: '#000', marginHorizontal: 40, fontSize: 15, }}>{item.task} </Text>
-
-
             <View style={styles.checkbox} >
-              <Checkbox status={isChecked(item.id) ? "checked" : "unchecked"} onPress={() => { checkToggleItem(currentItemIdx) }} />
-
+              <Checkbox status={item.isChecked ? "checked" : "unchecked"} onPress={() => { checkToggleItem(index) }} />
             </View>
-
           </View>
         </TouchableOpacity>
       </View>
+
     )
   };
 
   return (
 
     <SafeAreaView style={styles.container}>
-
       <StatusBar style="auto" />
 
+      <EvilIcons name="search" size={40} style={styles.note_search_icon} />
 
-      <EvilIcons name="search" size={40} style={activeTab == 1 ? styles.note_search_icon : styles.task_search_icon} />
       <View style={styles.search}>
-        <TextInput style={{ color: '#fff' }} placeholder=' Search... ' placeholderTextColor={'white'} onChangeText={activeTab == 1 ? handleOnNoteSearch : handleOnTaskSearch} />
+        <TextInput style={{ color: '#000' }} placeholder=' Search... ' placeholderTextColor={'#000'} onChangeText={activeTab == 1 ? handleOnNoteSearch : handleOnTaskSearch} />
       </View>
-
 
       <View style={styles.nav}>
         <TouchableOpacity style={activeTab == 1 ? styles.nav_bar : { marginHorizontal: 40 }} onPress={noteTab}>
@@ -145,11 +129,11 @@ export function Home({ navigation, route }) {
 
         <View style={styles.note_container}>
 
-           <FlatList
+          <FlatList
             data={noteList}
             renderItem={renderNoteItem}
             keyExtractor={item => item.id.toString()}
-            ListEmptyComponent={()=> <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Notes Found </Text> }
+            ListEmptyComponent={() => <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Notes Found </Text>}
             numColumns={numColumns}
           />
 
@@ -161,7 +145,6 @@ export function Home({ navigation, route }) {
 
       </View>}
 
-
       {activeTab == 2 && <View>
 
         <View style={styles.task_container}>
@@ -170,7 +153,7 @@ export function Home({ navigation, route }) {
             data={task}
             renderItem={renderTaskItem}
             keyExtractor={item => item.id.toString()}
-            ListEmptyComponent={()=> <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Tasks Found </Text> }
+            ListEmptyComponent={() => <Text style={{ textAlign: 'center', marginVertical: 30, fontSize: 35 }}> No Tasks Found </Text>}
           />
 
         </View>
@@ -180,7 +163,6 @@ export function Home({ navigation, route }) {
         </View>
 
       </View>}
-
 
     </SafeAreaView>
   );

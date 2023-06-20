@@ -8,8 +8,9 @@ export default (keyName) => {
     AsyncStorage.getItem(keyName).then(res => setOldValue(JSON.parse(res)));
   }, []);
 
-  const setNewValue = (newValue) => {
-    const totalList = [...oldValue, newValue]
+  const setNewValue = (newData, isResetList = false) => {
+    const totalList = isResetList ? [...newData] : [...oldValue, newData]
+
     AsyncStorage.setItem(keyName, JSON.stringify(totalList));
   }
 

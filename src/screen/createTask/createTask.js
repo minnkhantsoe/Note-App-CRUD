@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./createTask.style";
+import { Ionicons } from '@expo/vector-icons';
 import useAsyncHelper from "../../hook/custom/useAsyncHelper";
 
 export default function CreateTask({ navigation }) {
@@ -32,7 +33,7 @@ export default function CreateTask({ navigation }) {
       </View>
 
       <TouchableOpacity onPress={handleSubmit} style={styles.task_create_button}>
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Create</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Create    <Ionicons name="create-outline" size={18} color="#fff" /> </Text>
       </TouchableOpacity>
     </SafeAreaView >
 

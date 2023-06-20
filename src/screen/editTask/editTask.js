@@ -8,13 +8,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from "react";
 
 export default function EditTask({ navigation, route }) {
-  const [task, setTask] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const { item } = route.params;
-
-  useEffect(() => {
-    setTask(item?.task);
-  }, [])
+  const [task, setTask] = useState(item?.task);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleOnChangeTask = text => {
     setTask(text)
@@ -85,7 +81,7 @@ export default function EditTask({ navigation, route }) {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.task_create_button} onPress={() => setModalVisible(true)}>
-        <Text style={{ textAlign: 'center', color: '#fff'}}>Delete    <AntDesign name="delete" size={15} color="white" /> </Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Delete    <AntDesign name="delete" size={15} color="white" /> </Text>
       </TouchableOpacity>
 
     </SafeAreaView >

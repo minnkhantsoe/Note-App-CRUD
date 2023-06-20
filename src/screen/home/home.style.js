@@ -33,13 +33,12 @@ export const styles = StyleSheet.create({
 
   nav_text_left: {
     color: '#000',
-    opacity: 0.5,
-    fontSize: 30 
+    fontSize: 30
   },
 
   search: {
     position: 'absolute',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     paddingHorizontal: 15,
     paddingVertical: 10,
     width: 330,
@@ -54,14 +53,6 @@ export const styles = StyleSheet.create({
 
   note_search_icon: {
     color: '#1aa7ec',
-    position: 'absolute',
-    top: 28,
-    right: 305,
-    zIndex: 996
-  },
-
-  task_search_icon: {
-    color: '#fff',
     position: 'absolute',
     top: 28,
     right: 305,
@@ -132,11 +123,11 @@ export const styles = StyleSheet.create({
   },
 
   note: {
-    backgroundColor: '#000',
-    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderRadius: 13,
     marginBottom: 20,
-    width: 170,
-    marginHorizontal: 18,
+    width: 160,
+    marginHorizontal: 22,
   },
 
   note_title: {
@@ -144,14 +135,14 @@ export const styles = StyleSheet.create({
     paddingLeft: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    color: '#fff',
-    backgroundColor: '#000'
+    color: '#000',
+    backgroundColor: '#fff'
   },
 
   note_body: {
     fontSize: 20,
     paddingLeft: 10,
-    color: '#fff',
+    color: '#000',
   },
 
 

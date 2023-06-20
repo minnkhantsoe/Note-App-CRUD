@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./createNote.style";
+import { Ionicons } from '@expo/vector-icons';
 import useAsyncHelper from "../../hook/custom/useAsyncHelper";
 
 export default function CreateNote({ navigation }) {
@@ -22,7 +23,7 @@ export default function CreateNote({ navigation }) {
   };
 
   const handleSubmit = async () => {
-    
+
     setNewNote({ id: Date.now(), title: noteTitle, body: noteBody })
     navigation.navigate("Note");
 
@@ -41,7 +42,7 @@ export default function CreateNote({ navigation }) {
       </View>
 
       <TouchableOpacity onPress={handleSubmit} style={styles.note_create_button}>
-        <Text style={{ textAlign: 'center', color: '#fff' }}>Create</Text>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>Create    <Ionicons name="create-outline" size={18} color="#fff" /> </Text>
       </TouchableOpacity>
 
     </SafeAreaView >
